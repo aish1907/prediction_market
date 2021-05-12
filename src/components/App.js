@@ -39,7 +39,7 @@ class App extends Component {
        const fpmm = Fpmm.abi
       const cond = Condt.abi
       const weth = Weth.abi
-      const FPMMdf = FPMMDeterministicFactoryArtifact.abi
+      const Fpmmdf = FPMMDeterministicFactoryArtifact.abi
       const fpmmaddress = "0x2Da236c3d999389bEEa44b00c8B171f52754E15d"
       const condaddress = "0xa55C7Dcc4124B10449d0Cd8D72334964ECD67FDA"
       const wethadd = "0x57ae504d2FF5cf203828c573d3CC7417d140e048"
@@ -48,7 +48,7 @@ class App extends Component {
       const contract = new web3.eth.Contract(fpmm, fpmmaddress)
       const condcontract = new web3.eth.Contract(cond,condaddress)
       const collateralToken = new web3.eth.Contract(weth,wethadd)
-      const fpmmdf = new web3.eth.Contract(FPMMdf,fpmmdfadd)
+      const fpmmdf = new web3.eth.Contract(Fpmmdf,fpmmdfadd)
       this.setState({ contract })
       this.setState({ condcontract })
       this.setState({ collateralToken })
