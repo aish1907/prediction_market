@@ -3,6 +3,8 @@ import Web3 from 'web3';
 import './App.css';
 import Fpmm from '../abis/FixedProductMarketMaker.json'
 import Condt from '../abis/ConditionalTokens.json'
+import Weth from '../abis/WETH9.json'
+import FPMMDeterministicFactoryArtifact from '../abis/FPMMDeterministicFactory.json'
 import Navbar from "./Navbar";
 
 
@@ -34,15 +36,23 @@ class App extends Component {
     // 0x7E79bf33484b3994826356a0184B71B9Fe10967A
     // 0x382A8c5837d5dcD82F6b1EB6109e6066D43291d9
     if(networkId==80001) {
-      const abi = Fpmm.abi
-      const abi2 = Condt.abi
-      const address = "0x382A8c5837d5dcD82F6b1EB6109e6066D43291d9"
-      const condaddress = "0x7E79bf33484b3994826356a0184B71B9Fe10967A"
-      console.log(address);
-      const contract = new web3.eth.Contract(abi, address)
-      const condcontract = new web3.eth.Contract(abi2,condaddress)
+       const fpmm = Fpmm.abi
+      const cond = Condt.abi
+      const weth = Weth.abi
+      const FPMMdf = FPMMDeterministicFactoryArtifact.abi
+      const fpmmaddress = "0x2Da236c3d999389bEEa44b00c8B171f52754E15d"
+      const condaddress = "0xa55C7Dcc4124B10449d0Cd8D72334964ECD67FDA"
+      const wethadd = "0x57ae504d2FF5cf203828c573d3CC7417d140e048"
+      const fpmmdfadd = "0x6F20A18B134CB7169c8B93C7E6A9343228fa2b9a"
+      //console.log(address);
+      const contract = new web3.eth.Contract(fpmm, fpmmaddress)
+      const condcontract = new web3.eth.Contract(cond,condaddress)
+      const collateralToken = new web3.eth.Contract(weth,wethadd)
+      const fpmmdf = new web3.eth.Contract(FPMMdf,fpmmdfadd)
       this.setState({ contract })
       this.setState({ condcontract })
+      this.setState({ collateralToken })
+      this.setState({ fpmmdf })
       //await condcontract.methods.prepareCondition(0xF3d9D81e744B84a70CC40e790907a23BA2Cd018D,"0x0000000000000000000000000000000000000000000000000000000000000001",2).send({from: this.state.account})
       const condiId = await condcontract.methods.getConditionId("0xF3d9D81e744B84a70CC40e790907a23BA2Cd018D","0x0000000000000000000000000000000000000000000000000000000000000001",2).call()
       if(condiId){
@@ -133,10 +143,12 @@ class App extends Component {
       account: '',
       contract: null,
       condcontract: null,
-      liq: 0,
+      collateralToken:null,
+      fpmmdf: null,
+      liq: '0',
       web3: null,
       buffer: null,
-      coltok: 0,
+      investmentAmount: '0',
       condiId:"0x0000000000000000000000000000000000000000000000000000000000000000" 
     }
   
