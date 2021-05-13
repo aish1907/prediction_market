@@ -177,8 +177,8 @@ class App extends Component {
                       <p><input type="number" placeholder="0.0" onChange={this.handleToken} style={{ height: "35px", marginLeft: "350px", marginRight: "40px"}}></input></p>
                         <p><input type="radio" name="JTP" id="yes" value="yes"/>Yes{"\t"}
                            <input type="radio" name="JTP" id="no" value="no"/>No</p>
-                        <p><button className="btn btn-outline-success btn-lg" onClick={this.buyy} style={{ width: "157px",marginTop:"-20px", marginLeft: "300px"}}>YES</button>
-                        <button className="btn btn-outline-danger btn-lg" onClick={this.selll} style={{ width: "157px" ,marginTop:"30px",marginLeft: "30px", marginBottom: "50px"}}>NO</button></p>
+                        <p><button className="btn btn-outline-success btn-lg" onClick={this.buyy} style={{ width: "157px",marginTop:"-20px", marginLeft: "300px"}}>BUY</button>
+                        <button className="btn btn-outline-danger btn-lg" onClick={this.selll} style={{ width: "157px" ,marginTop:"30px",marginLeft: "30px", marginBottom: "50px"}}>SELL</button></p>
                         <button className="btn btn-outline-secondary btn-lg" onClick={this.res} style={{ width: "127px", marginLeft: "320px" , marginBottom: "100px", marginTop:"-30px"}}>RESOLVE</button>
                         <button className="btn btn-outline-warning btn-lg" onClick={this.rede} style={{ width: "127px", marginLeft: "30px" , marginBottom: "100px",marginTop:"-30px"}}>REDEEM</button>
                         
