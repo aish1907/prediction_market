@@ -1,67 +1,73 @@
-import React, { Component } from 'react';
-import Web3 from 'web3';
-import './App.css';
-import Fpmm from '../abis/FixedProductMarketMaker.json'
-import Condt from '../abis/ConditionalTokens.json'
-import Weth from '../abis/WETH9.json'
-import FPMMDeterministicFactoryArtifact from '../abis/FPMMDeterministicFactory.json'
+import React, { Component } from "react";
+import Web3 from "web3";
+import "./App.css";
+import Fpmm from "../abis/FixedProductMarketMaker.json";
+import Condt from "../abis/ConditionalTokens.json";
+import Weth from "../abis/WETH9.json";
+import FPMMDeterministicFactoryArtifact from "../abis/FPMMDeterministicFactory.json";
 import Navbar from "./Navbar";
-
-
+import data from "./data.json";
 class App extends Component {
-
   async componentWillMount() {
-    await this.loadWeb3()
-    await this.loadBlockchainData()
+    await this.loadWeb3();
+    await this.loadBlockchainData();
   }
 
   async loadWeb3() {
     if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum)
-      await window.ethereum.enable()
-    }
-    
-    else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+      window.web3 = new Web3(window.ethereum);
+      await window.ethereum.enable();
+    } else {
+      window.alert(
+        "Non-Ethereum browser detected. You should consider trying MetaMask!"
+      );
     }
   }
 
   async loadBlockchainData() {
-    const web3 = window.web3
+    const web3 = new Web3(window.ethereum);
     // Load account
-    const accounts = await web3.eth.getAccounts()
-    this.setState({ account: accounts[0] })
-    
-    const networkId = await web3.eth.net.getId()
+    const accounts = await web3.eth.getAccounts();
+
+    this.setState({ account: accounts[0] });
+
+    const networkId = await web3.eth.net.getId();
     // 0x7E79bf33484b3994826356a0184B71B9Fe10967A
     // 0x382A8c5837d5dcD82F6b1EB6109e6066D43291d9
-    if(networkId==80001) {
-       const fpmm = Fpmm.abi
-      const cond = Condt.abi
-      const weth = Weth.abi
-      const Fpmmdf = FPMMDeterministicFactoryArtifact.abi
-      const fpmmaddress = "0x2Da236c3d999389bEEa44b00c8B171f52754E15d"
-      const condaddress = "0xa55C7Dcc4124B10449d0Cd8D72334964ECD67FDA"
-      const wethadd = "0x57ae504d2FF5cf203828c573d3CC7417d140e048"
-      const fpmmdfadd = "0x6F20A18B134CB7169c8B93C7E6A9343228fa2b9a"
+    if (networkId == 80001) {
+      const fpmm = Fpmm.abi;
+      const cond = Condt.abi;
+      const weth = Weth.abi;
+      const Fpmmdf = FPMMDeterministicFactoryArtifact.abi;
+      const fpmmaddress = "0x2Da236c3d999389bEEa44b00c8B171f52754E15d";
+      const condaddress = "0xa55C7Dcc4124B10449d0Cd8D72334964ECD67FDA";
+      const wethadd = "0x57ae504d2FF5cf203828c573d3CC7417d140e048";
+      const fpmmdfadd = "0x6F20A18B134CB7169c8B93C7E6A9343228fa2b9a";
       //console.log(address);
-      const contract = new web3.eth.Contract(fpmm, fpmmaddress)
-      const condcontract = new web3.eth.Contract(cond,condaddress)
-      const collateralToken = new web3.eth.Contract(weth,wethadd)
-      const fpmmdf = new web3.eth.Contract(Fpmmdf,fpmmdfadd)
-      this.setState({ contract })
-      this.setState({ condcontract })
-      this.setState({ collateralToken })
-      this.setState({ fpmmdf })
+      const contract = new web3.eth.Contract(fpmm, fpmmaddress);
+      const condcontract = new web3.eth.Contract(cond, condaddress);
+      const collateralToken = new web3.eth.Contract(weth, wethadd);
+      const fpmmdf = new web3.eth.Contract(Fpmmdf, fpmmdfadd);
+      this.setState({ contract });
+      this.setState({ condcontract });
+      this.setState({ collateralToken });
+      this.setState({ fpmmdf });
       //await condcontract.methods.prepareCondition(0xF3d9D81e744B84a70CC40e790907a23BA2Cd018D,"0x0000000000000000000000000000000000000000000000000000000000000001",2).send({from: this.state.account})
-      const condiId = await condcontract.methods.getConditionId("0xF3d9D81e744B84a70CC40e790907a23BA2Cd018D","0x0000000000000000000000000000000000000000000000000000000000000001",2).call()
-      if(condiId){
-        console.log(condiId)
-      this.setState({ condiId })
-      }else{
-        console.log("aishwarya")
-      }
-      console.log(condiId)
+      // const condiId = await condcontract.methods
+      //   .getConditionId(
+      //     "0xF3d9D81e744B84a70CC40e790907a23BA2Cd018D",
+      //     "0x0000000000000000000000000000000000000000000000000000000000000001",
+      //     2
+      //   )
+      //   .call();
+      // console.log(condiId);
+      // if (condiId) {
+      //   console.log(condiId);
+      //   this.setState({ condiId });
+      // } else {
+      //   console.log("aishwarya");
+      // }
+      // console.log(condiId);
       //const colIDlo = await condcontract.methods.getcoll
       /* const coar = await contract.methods.arr().call()
       if(coar){const totalSupply = coar.length;
@@ -74,7 +80,7 @@ class App extends Component {
         })}
         //console.log(plac); */
 
-     /*  }
+      /*  }
       const balance = await contract.methods.balanceOf(accounts[0]).call()
       console.log(balance + "balance")
       this.setState({balance})
@@ -84,118 +90,268 @@ class App extends Component {
     } else {
       window.alert('Smart contract not deployed to detected network.')
     } */
-  }
+    }
   }
 
-  handleInput = event => {
+  handleInput = (event) => {
     this.setState({ liq: event.target.value });
   };
 
   addliq = () => {
-    const l = this.state.liq
-    this.state.contract.methods.addFunding(this.state.liq.toString(),["0"]).send({ from: this.state.account })
-    .once('recepient', (receipt) => {
-      console.log(receipt);
-    })
-    .on("error", () => {
-      console.log("error");
+    const l = this.state.liq;
+    this.state.contract.methods
+      .addFunding(this.state.liq.toString(), ["0"])
+      .send({ from: this.state.account })
+      .once("recepient", (receipt) => {
+        console.log(receipt);
+      })
+      .on("error", () => {
+        console.log("error");
+      });
+  };
+
+  buyOutcomeTokens = async () => {
+    const web3 = new Web3(window.ethereum);
+    const fpmm = Fpmm.abi;
+    const cond = Condt.abi;
+    const weth = Weth.abi;
+    const Fpmmdf = FPMMDeterministicFactoryArtifact.abi;
+    const fpmmaddress = "0x2Da236c3d999389bEEa44b00c8B171f52754E15d";
+    const condaddress = "0xa55C7Dcc4124B10449d0Cd8D72334964ECD67FDA";
+    const wethadd = "0x57ae504d2FF5cf203828c573d3CC7417d140e048";
+    const fpmmdfadd = "0x6F20A18B134CB7169c8B93C7E6A9343228fa2b9a";
+    const accounts = await web3.eth.getAccounts();
+
+    //console.log(address);
+    const contract = new web3.eth.Contract(fpmm, fpmmaddress);
+    const condcontract = new web3.eth.Contract(cond, condaddress);
+    const collateralToken = new web3.eth.Contract(weth, wethadd);
+    const fpmmdf = new web3.eth.Contract(Fpmmdf, fpmmdfadd);
+
+    const investmentAmount = web3.utils.toBN(1e2);
+    window.alert(investmentAmount);
+    const buyOutcomeIndex = 1; // NO
+    window.alert(accounts[0]);
+
+    const balnaceofcollatertoken = await collateralToken.methods
+      .balanceOf(accounts[0].toString())
+      .call();
+
+    window.alert(balnaceofcollatertoken);
+
+    // cono
+    await collateralToken.methods.deposit().send({
+      from: accounts[0],
+      value: "100",
     });
-    
+
+    const balanceOfweth = await collateralToken.methods
+      .balanceOf(accounts[0])
+      .call();
+    window.alert(balanceOfweth);
+
+    await collateralToken.methods
+      .approve(fpmmaddress, 100)
+      .send({ from: accounts[0] });
+
+    const outcomeTokensToBuy = await contract.methods
+      .calcBuyAmount(100, buyOutcomeIndex)
+      .call();
+
+    console.log("outcomeTokensToBuy : ", outcomeTokensToBuy);
+
+    window.alert(outcomeTokensToBuy);
+
+    await contract.methods
+      .buy(100, buyOutcomeIndex, outcomeTokensToBuy)
+      .send({ from: accounts[0] });
   };
 
   rede = () => {
-    this.state.contract.methods.redeemPositions(0x9DE03F9Ee15AF5FcF3035EaB4540fc2d3E5410c2,"0x0000000000000000000000000000000000000000000000000000000000000000",this.state.condiId,[1]).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-     console.log(receipt)
-    })
-  }
+    this.state.contract.methods
+      .redeemPositions(
+        0x9de03f9ee15af5fcf3035eab4540fc2d3e5410c2,
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+        this.state.condiId,
+        [1]
+      )
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        console.log(receipt);
+      });
+  };
 
-  handleToken = event => {
+  handleToken = (event) => {
     this.setState({ coltok: event.target.value });
   };
 
-  buyy = () =>{
-    this.state.contract.methods.buy(this.state.coltok,1,0).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-      console.log(receipt)
-     })
-  }
+  buyy = () => {
+    this.state.contract.methods
+      .buy(this.state.coltok, 1, 0)
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        console.log(receipt);
+      });
+  };
 
+  selll = () => {
+    this.state.contract.methods
+      .sell(this.state.coltok, 1, 0)
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        console.log(receipt);
+      });
+  };
 
-  selll = ()=>{
-    this.state.contract.methods.sell(this.state.coltok,1,0).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-      console.log(receipt)
-     })
-  }
-
-  res = ()=>{
-    this.state.condcontract.methods.reportPayouts("0x0000000000000000000000000000000000000000000000000000000000000001",[1,0]).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
-      console.log(receipt)
-     })
-  }
-
+  res = () => {
+    this.state.condcontract.methods
+      .reportPayouts(
+        "0x0000000000000000000000000000000000000000000000000000000000000001",
+        [1, 0]
+      )
+      .send({ from: this.state.account })
+      .once("receipt", (receipt) => {
+        console.log(receipt);
+      });
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      account: '',
+      account: "",
       contract: null,
       condcontract: null,
-      collateralToken:null,
+      collateralToken: null,
       fpmmdf: null,
-      liq: '0',
+      liq: "0",
       web3: null,
       buffer: null,
-      investmentAmount: '0',
-      condiId:"0x0000000000000000000000000000000000000000000000000000000000000000" 
-    }
-  
+      investmentAmount: "0",
+      condiId:
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+    };
   }
   render() {
-    return ( 
+    return (
       <div>
-        <Navbar  />
-
-          <div class="container">
-            <main role="main" class="container">
-                <div>
-                  <div class="jumbotron">
-                    
-                    <div className="row" style={{ paddingTop: "30px" }}>
-                      {" "}
-                      <div className="row" style={{ paddingLeft: "40px" }}>
-                        <h3>Will Donald Trump be inaugurated for his second term as President of the USA on Inauguration Day, January 20th, 2021?</h3>
-                      </div>
-                    </div>
+        <Navbar />
+        <button onClick={this.buyOutcomeTokens}> hello</button>
+        <div class="container">
+          <main role="main" class="container">
+            <div>
+              <div class="jumbotron">
+                <div className="row" style={{ paddingTop: "30px" }}>
+                  {" "}
+                  <div className="row" style={{ paddingLeft: "40px" }}>
+                    <h3>
+                      Will Donald Trump be inaugurated for his second term as
+                      President of the USA on Inauguration Day, January 20th,
+                      2021?
+                    </h3>
+                  </div>
                 </div>
-                <div className = "container">
-                <input type="number" placeholder="0.0" onChange={this.handleInput} style={{ height: "35px", marginLeft: "350px", marginRight: "40px",marginTop:"-80px"}}></input>
-                <button className="btn btn-outline-primary" onClick={this.addliq} style={{ marginLeftt: "30px",marginBottom:"30px",marginTop:"10px" }}>Add Liquidity</button>
-                <div className="row" style={{ paddingLeft: "40px" }}>
-                      <p><input type="number" placeholder="0.0" onChange={this.handleToken} style={{ height: "35px", marginLeft: "350px", marginRight: "40px"}}></input></p>
-                        <p><input type="radio" name="JTP" id="yes" value="yes"/>Yes{"\t"}
-                           <input type="radio" name="JTP" id="no" value="no"/>No</p>
-                        <p><button className="btn btn-outline-success btn-lg" onClick={this.buyy} style={{ width: "157px",marginTop:"-20px", marginLeft: "300px"}}>BUY</button>
-                        <button className="btn btn-outline-danger btn-lg" onClick={this.selll} style={{ width: "157px" ,marginTop:"30px",marginLeft: "30px", marginBottom: "50px"}}>SELL</button></p>
-                        <button className="btn btn-outline-secondary btn-lg" onClick={this.res} style={{ width: "127px", marginLeft: "320px" , marginBottom: "100px", marginTop:"-30px"}}>RESOLVE</button>
-                        <button className="btn btn-outline-warning btn-lg" onClick={this.rede} style={{ width: "127px", marginLeft: "30px" , marginBottom: "100px",marginTop:"-30px"}}>REDEEM</button>
-                        
-                </div>
-                
-                <div className="row" style={{ paddingLeft: "40px" }}>
-                </div>      
-                </div>
-
               </div>
-            </main>
-          </div>
+              <div className="container">
+                <input
+                  type="number"
+                  placeholder="0.0"
+                  onChange={this.handleInput}
+                  style={{
+                    height: "35px",
+                    marginLeft: "350px",
+                    marginRight: "40px",
+                    marginTop: "-80px",
+                  }}
+                ></input>
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={this.addliq}
+                  style={{
+                    marginLeftt: "30px",
+                    marginBottom: "30px",
+                    marginTop: "10px",
+                  }}
+                >
+                  Add Liquidity
+                </button>
+                <div className="row" style={{ paddingLeft: "40px" }}>
+                  <p>
+                    <input
+                      type="number"
+                      placeholder="0.0"
+                      onChange={this.handleToken}
+                      style={{
+                        height: "35px",
+                        marginLeft: "350px",
+                        marginRight: "40px",
+                      }}
+                    ></input>
+                  </p>
+                  <p>
+                    <input type="radio" name="JTP" id="yes" value="yes" />
+                    Yes{"\t"}
+                    <input type="radio" name="JTP" id="no" value="no" />
+                    No
+                  </p>
+                  <p>
+                    <button
+                      className="btn btn-outline-success btn-lg"
+                      onClick={this.buyy}
+                      style={{
+                        width: "157px",
+                        marginTop: "-20px",
+                        marginLeft: "300px",
+                      }}
+                    >
+                      BUY
+                    </button>
+                    <button
+                      className="btn btn-outline-danger btn-lg"
+                      onClick={this.selll}
+                      style={{
+                        width: "157px",
+                        marginTop: "30px",
+                        marginLeft: "30px",
+                        marginBottom: "50px",
+                      }}
+                    >
+                      SELL
+                    </button>
+                  </p>
+                  <button
+                    className="btn btn-outline-secondary btn-lg"
+                    onClick={this.res}
+                    style={{
+                      width: "127px",
+                      marginLeft: "320px",
+                      marginBottom: "100px",
+                      marginTop: "-30px",
+                    }}
+                  >
+                    RESOLVE
+                  </button>
+                  <button
+                    className="btn btn-outline-warning btn-lg"
+                    onClick={this.rede}
+                    style={{
+                      width: "127px",
+                      marginLeft: "30px",
+                      marginBottom: "100px",
+                      marginTop: "-30px",
+                    }}
+                  >
+                    REDEEM
+                  </button>
+                </div>
+
+                <div className="row" style={{ paddingLeft: "40px" }}></div>
+              </div>
+            </div>
+          </main>
+        </div>
       </div>
-      
     );
   }
 }
-
 
 export default App;
