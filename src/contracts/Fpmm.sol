@@ -1009,6 +1009,8 @@ contract ERC1155 is ERC165, IERC1155
 
 contract ConditionalTokens is ERC1155 {
 
+
+
     /// @dev Emitted upon the successful preparation of a condition.
     /// @param conditionId The condition's ID. This ID may be derived from the other three parameters via ``keccak256(abi.encodePacked(oracle, questionId, outcomeSlotCount))``.
     /// @param oracle The account assigned to report the result for the prepared condition.
@@ -1062,6 +1064,8 @@ contract ConditionalTokens is ERC1155 {
     /// Denominator is also used for checking if the condition has been resolved. If the denominator is non-zero, then the condition has been resolved.
     mapping(bytes32 => uint) public payoutDenominator;
 
+    uint[] qs;
+
     /// @dev This function prepares a condition by initializing a payout vector associated with the condition.
     /// @param oracle The account assigned to report the result for the prepared condition.
     /// @param questionId An identifier for the question to be answered by the oracle.
@@ -1074,6 +1078,10 @@ contract ConditionalTokens is ERC1155 {
         require(payoutNumerators[conditionId].length == 0, "condition already prepared");
         payoutNumerators[conditionId] = new uint[](outcomeSlotCount);
         emit ConditionPreparation(conditionId, oracle, questionId, outcomeSlotCount);
+    }
+
+    function ques(string q) external returns{
+        qs.push(q);
     }
 
     /// @dev Called by the oracle for reporting results of conditions. Will set the payout vector for the condition with the ID ``keccak256(abi.encodePacked(oracle, questionId, outcomeSlotCount))``, where oracle is the message sender, questionId is one of the parameters of this function, and outcomeSlotCount is the length of the payouts parameter, which contains the payoutNumerators for each outcome slot of the condition.
