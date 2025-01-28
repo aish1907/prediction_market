@@ -1,3 +1,5 @@
+P.S. - I've used Dapp University starter kit(by Gregory) that provided a basic react app setup for blockchain related projects, so you might find it mentioned somewhere in project.
+
 What is prediction market?
 
 Very similar to stock prediction model.
